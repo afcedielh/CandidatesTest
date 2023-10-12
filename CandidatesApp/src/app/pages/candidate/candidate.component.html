@@ -1,0 +1,79 @@
+<h1>Candidato <small>{{ candidate.name }} {{ candidate.surname}}</small></h1>
+<hr>
+<div class="row text-right">
+  <div class="col">
+    <button routerLink="/candidates"
+      class="btn btn-danger">
+      <i class="fa fa-arrow-left"></i>
+      Regresar
+    </button>
+  </div>
+</div>
+<br>
+<div *ngIf="isCreate" class="alert alert-primary" role="alert">
+  Registro creado correctamente
+  <br>
+</div>
+<div *ngIf="isUpdate" class="alert alert-primary" role="alert">
+  Registro actualizado correctamente
+  <br>
+</div>
+<div class="row animated fadeIn faster">
+  <div class="col">
+    <form (ngSubmit)="guardar( f )"
+          #f="ngForm">
+      <div class="form-group">
+        <label>Id</label>
+        <input type="text"
+                class="form-control"
+                placeholder="Id"
+                [(ngModel)]="candidate.idCandidate"
+                name="id"
+                disabled="disabled">
+        <small class="form-text text-muted">Este campo es autogenerado</small>
+      </div>
+
+      <div class="form-group">
+        <label>Nombre</label>
+        <input type="text"
+                class="form-control"
+                [(ngModel)]="candidate.name"
+                name="nombre"
+                placeholder="Nombre">
+      </div>
+
+      <div class="form-group">
+        <label>Apellido</label>
+        <input type="text"
+                class="form-control"
+                [(ngModel)]="candidate.surname"
+                name="apellido"
+                placeholder="Apellido">
+      </div>
+
+      <div class="form-group">
+        <label for="fechaNacimiento">Fecha Nacimiento</label>
+        <div class="date-picker">
+          <input type="date" id="fechaNacimiento" name="fechaNacimiento" [(ngModel)]="candidate.birthdate">
+          <i class="fas fa-calendar-alt"></i>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Correo</label>
+        <input type="text"
+                class="form-control"
+                [(ngModel)]="candidate.email"
+                name="correo"
+                placeholder="Correo">
+      </div>
+      <hr>
+      <div class="form-group text-center">
+        <button type="submit" class="btn btn-primary w-25">
+           <i class="fas fa-save"></i>
+           Guardar
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

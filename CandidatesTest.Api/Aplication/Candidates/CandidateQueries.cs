@@ -4,6 +4,7 @@ using CandidatesTest.Api.Candidates.Model;
 using CandidatesTest.Api.Persistence;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -27,9 +28,16 @@ namespace CandidatesTest.Api.Aplication.Candidates
 
             public async Task<List<CandidateDto>> Handle(CandidateListQuery request, CancellationToken cancellationToken)
             {
-                var candidates = await _context.candidates.ToListAsync();
-                var candidatesDto = _mapper.Map<List<Candidate>, List<CandidateDto>>(candidates);
-                return candidatesDto;
+                try
+                {
+                    var candidates = await _context.candidates.Include(c => c.Experience).ToListAsync();
+                    var candidatesDto = _mapper.Map<List<Candidate>, List<CandidateDto>>(candidates);
+                    return candidatesDto;
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception("Error al obtener la lista de candidatos: " + ex.Message);
+                }
             }
         }
     }

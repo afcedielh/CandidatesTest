@@ -27,15 +27,28 @@ namespace CandidatesTest.Api
         {
             services.AddControllers().AddFluentValidation(cfg => cfg.RegisterValidatorsFromAssemblyContaining<CandidateCreate>());
             services.AddAutoMapper(typeof(CandidateQueries.Handler));
+            string connectionString = Configuration.GetConnectionString("DefaultConnection");
+
             services.AddDbContext<CandidateContext>(options =>
             {
-                options.UseSqlServer("Data Source=(localdb)\\ProjectModels;Initial Catalog=CandidatesDB;Integrated Security=True;Connect Timeout=30;Encrypt=False");
+                options.UseSqlServer(connectionString);
             });
 
             services.AddMediatR(typeof(CandidateCreate.Handler).Assembly);
 
-            services.AddSwaggerGen(c =>{
+            services.AddSwaggerGen(c =>
+            {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "CandidatesTest.Api", Version = "v1" });
+            });
+            services.AddCors(options =>
+            {
+                options.AddPolicy("CorsPolicy", builder =>
+                {
+                    builder.AllowAnyOrigin()
+                                   .AllowAnyMethod()
+                                   .AllowAnyHeader()
+                                   .WithExposedHeaders("Content-Disposition");
+                });
             });
         }
 
@@ -47,6 +60,7 @@ namespace CandidatesTest.Api
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseCors("CorsPolicy");
             app.UseRouting();
 
             app.UseAuthorization();

@@ -11,15 +11,13 @@ namespace CandidatesTest.Api.Aplication.Candidates
 {
     public class CandidateCreate
     {
-        public class Command : IRequest
+        public class Command : IRequest<int>
         {
             public int IdCandidate { get; set; }
             public string Name { get; set; }
             public string Surname { get; set; }
             public DateTime Birthdate { get; set; }
             public string Email { get; set; }
-            public DateTime InsertDate { get; set; }
-            public DateTime ModifyDate { get; set; }
             public ICollection<CandidateExperience> Experiences { get; set; }
         }
 
@@ -27,40 +25,52 @@ namespace CandidatesTest.Api.Aplication.Candidates
         {
             public CommandValidation()
             {
-                RuleFor(x => x.Name).NotEmpty();
-                RuleFor(x => x.Surname).NotEmpty();
-                RuleFor(x => x.Email).NotEmpty();
+                RuleFor(x => x.Name).NotEmpty().MaximumLength(100);
+                RuleFor(x => x.Surname).NotEmpty().MaximumLength(100);
+                RuleFor(x => x.Email).NotEmpty().EmailAddress();
             }
         }
 
-        public class Handler : IRequestHandler<Command>
+        public class Handler : IRequestHandler<Command, int>
         {
-            public readonly CandidateContext _context;
+            private readonly CandidateContext _context;
 
             public Handler(CandidateContext context)
             {
                 _context = context;
             }
 
-            public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
+            public async Task<int> Handle(Command request, CancellationToken cancellationToken)
             {
-                var candidate = new Candidate
+                try
                 {
-                    Name = request.Name,
-                    Surname = request.Surname,
-                    Birthdate = request.Birthdate,
-                    Email = request.Email,
-                    InsertDate = DateTime.Now,
-                    ModifyDate = DateTime.Now,
-                    Experience = request.Experiences
-                };
-                _context.candidates.Add(candidate);
-                var value = await _context.SaveChangesAsync();
-                if (value > 0)
-                {
-                    return Unit.Value;
+                    var candidate = new Candidate
+                    {
+                        Name = request.Name,
+                        Surname = request.Surname,
+                        Birthdate = request.Birthdate,
+                        Email = request.Email,
+                        InsertDate = DateTime.Now,
+                        ModifyDate = DateTime.Now,
+                        Experience = request.Experiences
+                    };
+
+                    _context.candidates.Add(candidate);
+                    var value = await _context.SaveChangesAsync();
+
+                    if (value > 0)
+                    {
+                        return candidate.IdCandidate;
+                    }
+                    else
+                    {
+                        throw new Exception("No se pudo insertar el candidato.");
+                    }
                 }
-                throw new Exception("No se pudo insertar el candidato");
+                catch (Exception ex)
+                {
+                    throw new Exception("Error al crear el candidato: " + ex.Message);
+                }
             }
         }
     }

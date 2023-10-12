@@ -1,6 +1,5 @@
-﻿using CandidatesTest.Api.Candidates.Model;
+﻿using System;
 using System.Collections.Generic;
-using System;
 
 namespace CandidatesTest.Api.Aplication.DTO
 {
@@ -11,6 +10,7 @@ namespace CandidatesTest.Api.Aplication.DTO
         public string Surname { get; set; }
         public DateTime Birthdate { get; set; }
         public string Email { get; set; }
+        public List<CandidateExperienceDTO> Experiences { get; set; }
 
     }
 }

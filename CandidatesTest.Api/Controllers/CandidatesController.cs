@@ -14,12 +14,14 @@ namespace CandidatesTest.Api.Controllers
     public class CandidateController : ControllerBase
     {
         private readonly IMediator _mediator;
+
         public CandidateController(IMediator mediator)
         {
             _mediator = mediator;
         }
 
         [HttpPost]
+        [ProducesResponseType(201)] 
         public async Task<ActionResult<Unit>> CreateCandidate([FromBody] CandidateCreate.Command data)
         {
             var result = await _mediator.Send(data);
@@ -27,18 +29,53 @@ namespace CandidatesTest.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<CandidateDto>>> GetCandidates()
+        [ProducesResponseType(200)]
+        public async Task<ActionResult<List<CandidateDto>>>
+        GetCandidates()
         {
-            return await _mediator.Send(new CandidateQueries.CandidateListQuery());
+            var candidates = await _mediator.Send(new CandidateQueries.CandidateListQuery());
+            return Ok(candidates);
         }
 
         [HttpGet("{id}")]
         [SwaggerOperation("Obtener un candidato por su ID")]
-        [ProducesResponseType(typeof(CandidateDto), 200)]
-        [ProducesResponseType(404)]
+        [ProducesResponseType(200, Type = typeof(CandidateDto))] 
+        [ProducesResponseType(404)] 
         public async Task<ActionResult<CandidateDto>> GetCandidate(int id)
         {
-            return await _mediator.Send(new CandidateQueriesFilter.CandidateQuery { Id = id });
+            var candidate = await _mediator.Send(new CandidateQueriesFilter.CandidateQuery { Id = id });
+
+            if (candidate == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(candidate);
+        }
+
+        [HttpPut("{id}")]
+        [ProducesResponseType(200)] 
+        public async Task<ActionResult<CandidateDto>> UpdateCandidate(int id, [FromBody] CandidateUpdate.Command data)
+        {
+            data.IdCandidate = id;
+            var updatedCandidate = await _mediator.Send(data);
+            return Ok(updatedCandidate);
+        }
+
+        [HttpDelete("{id}")]
+        [ProducesResponseType(204)] 
+        public async Task<IActionResult> DeleteCandidate(int id)
+        {
+            var success = await _mediator.Send(new CandidateDelete.CandidateQuery { Id = id });
+
+            if (success)
+            {
+                return NoContent();
+            }
+            else
+            {
+                return NotFound();
+            }
         }
     }
 }
