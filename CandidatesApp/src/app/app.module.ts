@@ -6,6 +6,7 @@ import { AppComponent } from './app.component';
 import { CandidateComponent } from './pages/candidate/candidate.component';
 import { CandidatesComponent } from './pages/candidates/candidates.component';
 import { AppRoutingModule } from './app-routing.module';
+import { ExperienceComponent } from './pages/experience/experience.component';
 
 
 
@@ -13,7 +14,8 @@ import { AppRoutingModule } from './app-routing.module';
   declarations: [
     AppComponent,
     CandidateComponent,
-    CandidatesComponent
+    CandidatesComponent,
+    ExperienceComponent
   ],
   imports: [
     BrowserModule,

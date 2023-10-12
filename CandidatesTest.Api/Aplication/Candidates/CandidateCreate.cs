@@ -18,7 +18,6 @@ namespace CandidatesTest.Api.Aplication.Candidates
             public string Surname { get; set; }
             public DateTime Birthdate { get; set; }
             public string Email { get; set; }
-            public ICollection<CandidateExperience> Experiences { get; set; }
         }
 
         public class CommandValidation : AbstractValidator<Command>
@@ -52,7 +51,6 @@ namespace CandidatesTest.Api.Aplication.Candidates
                         Email = request.Email,
                         InsertDate = DateTime.Now,
                         ModifyDate = DateTime.Now,
-                        Experience = request.Experiences
                     };
 
                     _context.candidates.Add(candidate);

@@ -8,6 +8,7 @@
       Regresar
     </button>
   </div>
+
 </div>
 <br>
 <div *ngIf="isCreate" class="alert alert-primary" role="alert">
@@ -58,7 +59,6 @@
           <i class="fas fa-calendar-alt"></i>
         </div>
       </div>
-
       <div class="form-group">
         <label>Correo</label>
         <input type="text"
@@ -67,7 +67,7 @@
                 name="correo"
                 placeholder="Correo">
       </div>
-      <hr>
+      <br>
       <div class="form-group text-center">
         <button type="submit" class="btn btn-primary w-25">
            <i class="fas fa-save"></i>
@@ -76,4 +76,40 @@
       </div>
     </form>
   </div>
+</div>
+<br>
+
+<hr>
+<div *ngIf="candidate.idCandidate">
+  <h1>Listado de Experiencias</h1>
+  <hr>
+  <div  class="row">
+    <div class="col text-right">
+      <button [routerLink]="['/experience/', candidate.idCandidate]"
+      class="btn btn-primary">
+      <i class="fa fa-plus">
+        Agregar experiencia
+      </i>
+    </button>
+  </div>
+</div>
+<br>
+<table  class="table table-hover mt-3 animated fadeIn faster">
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>Empresa</th>
+      <th>Cargo</th>
+      <th>Descripción</th>
+      <th>Salario</th>
+      <th>Fecha Inicio</th>
+      <th>Fecha Fin</th>
+      <th>Fecha Fin</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+    </tr>
+  </tbody>
+</table>
 </div>

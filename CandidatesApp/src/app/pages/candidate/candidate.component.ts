@@ -17,9 +17,24 @@ export class CandidateComponent implements OnInit{
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');
     if (id !== null && id !== 'nuevo') {
-      this.CandidatesService.getCandidateById(id).subscribe((resp : CandidateModel) => {
-        console.log(resp);
+      this.CandidatesService.getCandidateById(id).subscribe((resp: CandidateModel) => {
         this.candidate = resp;
+
+        // Mapear campos de experiencia aquí
+        this.candidate.experiences = resp.experiences.map((exp) => {
+          return {
+            IdCandidateExperience: exp.IdCandidateExperience,
+            IdCandidate: exp.IdCandidate,
+            Company: exp.Company,
+            Job: exp.Job,
+            Description: exp.Description,
+            Salary: exp.Salary,
+            Begindate: new Date(exp.Begindate),
+            Enddate: new Date(exp.Enddate),
+          };
+        });
+
+        console.log(this.candidate);
       });
     }
   }

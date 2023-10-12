@@ -1,11 +1,13 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CandidatesTest.Api.Candidates.Model
 {
     public class CandidateExperience
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int IdCandidateExperience { get; set; }
         public int IdCandidate { get; set; }
         public Candidate Candidate { get; set; }
@@ -17,5 +19,6 @@ namespace CandidatesTest.Api.Candidates.Model
         public DateTime Enddate { get; set; }
         public DateTime InsertDate { get; set; }
         public DateTime ModifyDate { get; set; }
+
     }
 }

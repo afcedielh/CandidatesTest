@@ -1,0 +1,30 @@
+/* Estilos para el campo de fecha */
+.form-group .date-picker {
+  display: flex;
+  align-items: center;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 5px;
+}
+
+.form-group .date-picker input[type="date"] {
+  border: none;
+  outline: none;
+  width: 100%;
+  font-size: 16px;
+  padding: 5px;
+}
+
+.form-group .date-picker i {
+  font-size: 20px;
+  margin-left: 10px;
+  color: #333;
+}
+
+/* Estilos adicionales para mejorar la apariencia */
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: #333;
+}

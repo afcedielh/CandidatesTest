@@ -1,5 +1,6 @@
 using AutoMapper;
 using CandidatesTest.Api.Aplication.Candidates;
+using CandidatesTest.Api.Candidates.Aplication.Experiences;
 using CandidatesTest.Api.Persistence;
 using FluentValidation.AspNetCore;
 using MediatR;
@@ -26,6 +27,7 @@ namespace CandidatesTest.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers().AddFluentValidation(cfg => cfg.RegisterValidatorsFromAssemblyContaining<CandidateCreate>());
+            services.AddControllers().AddFluentValidation(cfg => cfg.RegisterValidatorsFromAssemblyContaining<ExperienceCreate>());
             services.AddAutoMapper(typeof(CandidateQueries.Handler));
             string connectionString = Configuration.GetConnectionString("DefaultConnection");
 

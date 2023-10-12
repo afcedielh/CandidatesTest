@@ -36,13 +36,7 @@ namespace CandidatesTest.Api.Aplication.Candidates
                     var candidate = await _context.candidates
                         .Where(a => a.IdCandidate == request.Id)
                         .Include(c => c.Experience)
-                        .FirstOrDefaultAsync();
-
-                    if (candidate == null)
-                    {
-                        throw new Exception("Candidato no encontrado.");
-                    }
-
+                        .FirstOrDefaultAsync() ?? throw new Exception("Candidato no encontrado.");
                     var candidateDto = _mapper.Map<Candidate, CandidateDto>(candidate);
                     return candidateDto;
                 }

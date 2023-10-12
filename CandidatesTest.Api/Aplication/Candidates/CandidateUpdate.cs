@@ -3,7 +3,10 @@ using CandidatesTest.Api.Aplication.DTO;
 using CandidatesTest.Api.Candidates.Model;
 using CandidatesTest.Api.Persistence;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -37,18 +40,19 @@ namespace CandidatesTest.Api.Aplication.Candidates
             {
                 try
                 {
-                    var candidate = await _context.candidates.FindAsync(request.IdCandidate);
-
-                    if (candidate == null)
+                    var candidate = await _context.candidates
+                        .Include(c => c.Experience)
+                        .FirstOrDefaultAsync(c => c.IdCandidate == request.IdCandidate) ?? throw new Exception("Candidato no encontrado.");
+                    if (candidate.ModifyDate != request.ModifyDate)
                     {
-                        throw new Exception("Candidato no encontrado.");
+                        throw new Exception("El candidato ha sido modificado por otro usuario. Actualiza y vuelve a intentar.");
                     }
 
                     candidate.Name = request.Name;
                     candidate.Surname = request.Surname;
                     candidate.Birthdate = request.Birthdate;
                     candidate.ModifyDate = DateTime.Now;
-
+                    candidate.ModifyDate = DateTime.Now;
                     var value = await _context.SaveChangesAsync();
 
                     if (value > 0)
@@ -65,7 +69,7 @@ namespace CandidatesTest.Api.Aplication.Candidates
                 {
                     throw new Exception("Error al actualizar el candidato: " + ex.Message);
                 }
-            }
+            }          
         }
     }
 }
